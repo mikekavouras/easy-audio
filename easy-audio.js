@@ -20,6 +20,8 @@
 
         $(this).toggleClass('playing');
       });
+
+      $.fn.easyAudio.bindEvents();
     });
 
   };
@@ -27,7 +29,7 @@
   $.fn.easyAudio.audio = null;
 
   $.fn.easyAudio.defaults = {
-
+    countDirection: 'up'
   };
 
   $.fn.easyAudio.setupAudio = function() {
@@ -47,6 +49,20 @@
     }
 
     return false;
+  };
+
+  $.fn.easyAudio.bindEvents = function() {
+    $($.fn.easyAudio.audio).bind('timeupdate', function() {
+      $.fn.easyAudio.formatSecondsToMinutes($.fn.easyAudio.audio.currentTime);
+    });
+  };
+
+  $.fn.easyAudio.formatSecondsToMinutes = function(seconds) {
+    var minutes = Math.floor(seconds / 60);
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var seconds = Math.floor((seconds - (60 * minutes)));
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    console.log(minutes + " : " + seconds);
   };
 
 }(jQuery));
