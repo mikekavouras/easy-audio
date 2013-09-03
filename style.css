@@ -1,0 +1,23 @@
+html, body {
+  height: 100%;
+}
+
+#playPause {
+  margin: 0px auto;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  background: #ccc;
+  border-radius: 60px;
+}
+
+#playPause.playing {
+  background: #333;
+}
+
+#show-time {
+  text-align: center;
+  width: 100%;
+  font-family: verdana;
+  font-weight: 100;
+}

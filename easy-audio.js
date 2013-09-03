@@ -22,6 +22,14 @@
       });
 
       $.fn.easyAudio.bindEvents();
+
+      if ($.fn.easyAudio.options.showTime) {
+        if ($.fn.easyAudio.options.countDirection === "up") {
+          $.fn.easyAudio.countUp();
+        } else {
+          $.fn.easyAudio.countDown();
+        }
+      }
     });
 
   };
@@ -29,7 +37,9 @@
   $.fn.easyAudio.audio = null;
 
   $.fn.easyAudio.defaults = {
-    countDirection: 'up'
+    showTime: false,
+    countDirection: 'up',
+    $time: null
   };
 
   $.fn.easyAudio.setupAudio = function() {
@@ -44,6 +54,7 @@
         var $audio = $('<audio src="'+src+'"></audio>');
         $('body').append($audio);
         $.fn.easyAudio.audio = $audio.get(0);
+        $.fn.easyAudio.$audio = $audio;
         return true;
       }
     }
@@ -57,12 +68,30 @@
     });
   };
 
+  $.fn.easyAudio.countUp = function() {
+    $.fn.easyAudio.$audio.unbind('timeupdate');
+    $.fn.easyAudio.$audio.bind('timeupdate', function() {
+      var time = $.fn.easyAudio.formatSecondsToMinutes($.fn.easyAudio.audio.currentTime);
+      $('#show-time').html(time.minutes + ":" + time.seconds);
+    });
+  };
+
+  $.fn.easyAudio.countDown = function() {
+    $.fn.easyAudio.$audio.unbind('timeupdate');
+    $.fn.easyAudio.$audio.bind('timeupdate', function() {
+      var time = $.fn.easyAudio.formatSecondsToMinutes($.fn.easyAudio.audio.duration - $.fn.easyAudio.audio.currentTime);
+      $('#show-time').html(time.minutes + ":" + time.seconds);
+    });
+  };
+
   $.fn.easyAudio.formatSecondsToMinutes = function(seconds) {
     var minutes = Math.floor(seconds / 60);
     minutes = minutes < 10 ? "0" + minutes : minutes;
     var seconds = Math.floor((seconds - (60 * minutes)));
     seconds = seconds < 10 ? "0" + seconds : seconds;
-    console.log(minutes + " : " + seconds);
+    return {
+      minutes: minutes,
+      seconds: seconds
+    };
   };
-
 }(jQuery));
