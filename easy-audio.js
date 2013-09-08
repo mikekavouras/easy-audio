@@ -1,33 +1,34 @@
 (function() {
   $.fn.easyAudio = function(options) {
 
-    $.fn.easyAudio.options = $.extend({}, $.fn.easyAudio.defaults, options);
+    var opts = $.extend({}, $.fn.easyAudio.defaults, options);
 
     return this.each(function() {
-      if(!$.fn.easyAudio.setupAudio()) {
+      opts.$audio = $.fn.easyAudio.setupAudio(opts);
+      if (!opts.$audio) {
         alert("Your browser doesn't support audio");
         return false;
       }
 
+      opts.audio =  opts.$audio.get(0);
+
       $(this).bind('click', function() {
-        var audio = $.fn.easyAudio.audio;
+        var audio = opts.audio;
 
         if (audio.paused) {
           audio.play();
         } else {
           audio.pause();
         }
-
-        $(this).toggleClass('playing');
       });
 
       $.fn.easyAudio.bindEvents();
 
-      if ($.fn.easyAudio.options.showTime) {
-        if ($.fn.easyAudio.options.countDirection === "up") {
-          $.fn.easyAudio.countUp();
+      if (opts.showTime) {
+        if (opts.countDirection === "up") {
+          $.fn.easyAudio.countUp(opts);
         } else {
-          $.fn.easyAudio.countDown();
+          $.fn.easyAudio.countDown(opts);
         }
       }
     });
@@ -42,7 +43,7 @@
     $time: null
   };
 
-  $.fn.easyAudio.setupAudio = function() {
+  $.fn.easyAudio.setupAudio = function(opts) {
     var audio = document.createElement('audio');
     if (!!!audio.canPlayType) return false;
 
@@ -50,12 +51,10 @@
 
     for (var i = 0; i < types.length; i++) {
       if (!!audio.canPlayType(types[i])) {
-        var src = $.fn.easyAudio.options[types[i].replace('audio/','')];
+        var src = opts[types[i].replace('audio/','')];
         var $audio = $('<audio src="'+src+'"></audio>');
         $('body').append($audio);
-        $.fn.easyAudio.audio = $audio.get(0);
-        $.fn.easyAudio.$audio = $audio;
-        return true;
+        return $audio;
       }
     }
 
@@ -68,18 +67,18 @@
     });
   };
 
-  $.fn.easyAudio.countUp = function() {
-    $.fn.easyAudio.$audio.unbind('timeupdate');
-    $.fn.easyAudio.$audio.bind('timeupdate', function() {
-      var time = $.fn.easyAudio.formatSecondsToMinutes($.fn.easyAudio.audio.currentTime);
+  $.fn.easyAudio.countUp = function(opts) {
+    opts.$audio.unbind('timeupdate');
+    opts.$audio.bind('timeupdate', function() {
+      var time = $.fn.easyAudio.formatSecondsToMinutes(opts.audio.currentTime);
       $('#show-time').html(time.minutes + ":" + time.seconds);
     });
   };
 
-  $.fn.easyAudio.countDown = function() {
-    $.fn.easyAudio.$audio.unbind('timeupdate');
-    $.fn.easyAudio.$audio.bind('timeupdate', function() {
-      var time = $.fn.easyAudio.formatSecondsToMinutes($.fn.easyAudio.audio.duration - $.fn.easyAudio.audio.currentTime);
+  $.fn.easyAudio.countDown = function(opts) {
+    opts.$audio.unbind('timeupdate');
+    opts.$audio.bind('timeupdate', function() {
+      var time = $.fn.easyAudio.formatSecondsToMinutes(opts.audio.duration - opts.audio.currentTime);
       $('#show-time').html(time.minutes + ":" + time.seconds);
     });
   };
