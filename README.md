@@ -1,7 +1,7 @@
 easy-audio
 ==========
 
-Dead simple way to add sound effects to any HTML5 program.
+Dead simple way to add sound effects to any website.
 
 ```javascript
   $('#playPauseButton').easyAudio({
