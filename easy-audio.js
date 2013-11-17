@@ -4,22 +4,24 @@
     var opts = $.extend({}, $.fn.easyAudio.defaults, options);
 
     return this.each(function() {
-      opts.$audio = $.fn.easyAudio.setupAudio(opts);
+      var isConfigured = $.fn.easyAudio.configureAudio(opts);
 
-      if (!opts.$audio) {
+      if (!isConfigured) {
         alert("Your browser doesn't support audio");
         return false;
       }
 
+      opts.$audio = $('<audio src="'+opts.src+'" preload="auto"></audio');
       opts.audio =  opts.$audio.get(0);
 
-      $(this).bind('click', function() {
-        var audio = opts.audio;
+      $('body').append(opts.$audio);
 
-        if (audio.paused) {
-          audio.play();
+      $(this).bind('click', function() {
+        if (opts.audio.paused) {
+          console.log('here');
+          opts.audio.play();
         } else {
-          audio.pause();
+          opts.audio.pause();
         }
       });
 
@@ -32,7 +34,7 @@
   $.fn.easyAudio.defaults = {
   };
 
-  $.fn.easyAudio.setupAudio = function(opts) {
+  $.fn.easyAudio.configureAudio = function(opts) {
     var audio = document.createElement('audio');
     if (!!!audio.canPlayType) return false;
 
@@ -41,9 +43,8 @@
     for (var i = 0; i < types.length; i++) {
       if (!!audio.canPlayType(types[i])) {
         var src = opts[types[i].replace('audio/','')];
-        var $audio = $('<audio src="'+src+'"></audio>');
-        $('body').append($audio);
-        return $audio;
+        opts.src = src;
+        return true;
       }
     }
 

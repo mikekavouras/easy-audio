@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#trigger').easyAudio({
-    mpeg: 'http://meaganproctorkavouras.com/audio/song.mp3',
-    wav:  'http://meaganproctorkavouras.com/audio/song.wav',
-    ogg:  'http://meaganproctorkavouras.com/audio/song.ogg'
+    mpeg: 'audio/song.mp3',
+    wav:  'audio/song.wav',
+    ogg:  'audio/song.ogg'
   });
 });
