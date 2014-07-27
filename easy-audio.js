@@ -43,8 +43,8 @@
 
     var types = {
       'audio/mpeg' : 'mp3',
-      'audio/ogg' : 'ogg',
-      'audio/wav' : 'wav'
+      'audio/wav' : 'wav',
+      'audio/ogg' : 'ogg'
     };
 
     var keys = Object.keys(types);
