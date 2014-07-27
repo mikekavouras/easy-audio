@@ -4,46 +4,53 @@
     var opts = $.extend({}, $.fn.easyAudio.defaults, options);
 
     return this.each(function() {
-      var isConfigured = $.fn.easyAudio.configureAudio(opts);
+      opts.$elem = $(this);
 
-      if (!isConfigured) {
+      var configured = $.fn.easyAudio.configure(opts);
+
+      if (!configured) {
         alert("Your browser doesn't support audio");
         return false;
       }
 
-      opts.$audio = $('<audio src="'+opts.src+'" preload="auto"></audio');
-      opts.audio =  opts.$audio.get(0);
-
-      $('body').append(opts.$audio);
-
-      $(this).bind('click', function() {
-        if (opts.audio.paused) {
-          console.log('here');
-          opts.audio.play();
-        } else {
-          opts.audio.pause();
-        }
-      });
-
+      $.fn.easyAudio.addAudio(opts);
+      $.fn.easyAudio.bindEvents(opts);
     });
-
   };
 
-  $.fn.easyAudio.audio = null;
+  $.fn.easyAudio.defaults = {};
 
-  $.fn.easyAudio.defaults = {
-  };
+  $.fn.easyAudio.bindEvents = function(opts) {
+    var audio = opts.audio;
+    opts.$elem.bind('click', function() {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+  }
 
-  $.fn.easyAudio.configureAudio = function(opts) {
+  $.fn.easyAudio.addAudio = function(opts) {
+    opts.$audio = $('<audio src="'+opts.src+'" preload="auto"></audio');
+    opts.audio =  opts.$audio.get(0);
+    $('body').append(opts.$audio);
+  }
+
+  $.fn.easyAudio.configure = function(opts) {
     var audio = document.createElement('audio');
     if (!!!audio.canPlayType) return false;
 
-    var types = ['audio/mpeg', 'audio/ogg', 'audio/wav'];
+    var types = {
+      'audio/mpeg' : 'mp3',
+      'audio/ogg' : 'ogg',
+      'audio/wav' : 'wav'
+    };
 
-    for (var i = 0; i < types.length; i++) {
-      if (!!audio.canPlayType(types[i])) {
-        var src = opts[types[i].replace('audio/','')];
-        opts.src = src;
+    var keys = Object.keys(types);
+    for (var i = 0; i < keys.length; i++) {
+      if (!!audio.canPlayType(keys[i])) {
+        opts.src = opts.src + '.' + types[keys[i]];
         return true;
       }
     }
