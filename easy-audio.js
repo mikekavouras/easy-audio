@@ -22,9 +22,9 @@
 
   $.fn.easyAudio.bindEvents = function(opts) {
     var audio = opts.audio;
-    opts.$elem.bind('click', function() {
+    opts.$elem.bind('click.easyaudio', function() {
       audio.play();
-      opts.$elem.unbind('click');
+      opts.$elem.unbind('click.easyaudio');
 
       $.fn.easyAudio.addAudio(opts);
       $.fn.easyAudio.bindEvents(opts);
