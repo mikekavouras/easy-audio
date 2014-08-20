@@ -1,9 +1,8 @@
 (function() {
   $.fn.easyAudio = function(options) {
 
-    var opts = $.extend({}, $.fn.easyAudio.defaults, options);
-
     return this.each(function() {
+      var opts = $.extend({}, $.fn.easyAudio.defaults, options);
       opts.$elem = $(this);
 
       var configured = $.fn.easyAudio.configure(opts);
@@ -16,6 +15,7 @@
       $.fn.easyAudio.addAudio(opts);
       $.fn.easyAudio.bindEvents(opts);
     });
+
   };
 
   $.fn.easyAudio.defaults = {};
