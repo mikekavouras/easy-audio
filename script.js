@@ -1,5 +1,8 @@
 $(document).ready(function() {
   $('#trigger').easyAudio({
-    src: 'audio/kiss'
+    src: 'audio/sub',
+    onPlay: function() {
+      console.log('playing');
+    }
   });
 });

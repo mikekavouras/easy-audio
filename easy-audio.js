@@ -23,10 +23,14 @@
   $.fn.easyAudio.bindEvents = function(opts) {
     var audio = opts.audio;
     opts.$elem.bind('click', function() {
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
+      audio.play();
+      opts.$elem.unbind('click');
+
+      $.fn.easyAudio.addAudio(opts);
+      $.fn.easyAudio.bindEvents(opts);
+
+      if (opts.onPlay) {
+        opts.onPlay();
       }
     });
   }
@@ -35,6 +39,10 @@
     opts.$audio = $('<audio src="'+opts.src+'" preload="auto"></audio');
     opts.audio =  opts.$audio.get(0);
     $('body').append(opts.$audio);
+
+    opts.$audio.bind('ended', function() {
+      $(this).remove();
+    });
   }
 
   $.fn.easyAudio.configure = function(opts) {
