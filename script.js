@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $('#trigger').easyAudio({
-    src: 'audio/sub',
+    src: 'audio/kiss',
     onPlay: function() {
       console.log('playing');
     }
