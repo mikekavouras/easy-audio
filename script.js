@@ -5,6 +5,7 @@ $(document).ready(function() {
   });
   $('#trigger').easyAudio({
     src: 'audio/knock',
-    event: 'mouseenter'
+    event: 'mouseenter',
+    conditions: [ function() { return 1 === 1; } ]
   });
 });

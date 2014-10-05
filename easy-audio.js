@@ -7,12 +7,12 @@
 
       var configured = $.fn.easyAudio.configure(opts);
 
-      if (!configured) {
+      if ( ! configured) {
         alert("Your browser doesn't support audio");
         return false;
       }
 
-      $.fn.easyAudio.addAudio(opts);
+      // $.fn.easyAudio.addAudio(opts);
       $.fn.easyAudio.bindEvents(opts);
     });
 
@@ -21,13 +21,32 @@
   $.fn.easyAudio.defaults = {};
 
   $.fn.easyAudio.bindEvents = function(opts) {
-    var audio = opts.audio;
     var ev = opts.event + '.easyaudio';
     opts.$elem.bind(ev, function() {
-      audio.play();
-      opts.$elem.unbind(ev);
+      var audio = $.fn.easyAudio.addAudio(opts);
 
-      $.fn.easyAudio.addAudio(opts);
+      if (opts.conditions) {
+        if (Object.prototype.toString.call(opts.conditions) === "[object Array]") {
+          var play = true;
+          for (var i = 0; i < opts.conditions.length; i++) {
+            if ( ! opts.conditions[i]()) {
+              play = false;
+              break;
+            }
+          }
+          if (play) {
+            audio.play();
+          }
+        } else if (Object.prototype.toString.call(opts.conditions) === "[object Function]") {
+          if (opts.conditions()) {
+            audio.play();
+          }
+        }
+      } else {
+        audio.play();
+      }
+
+      opts.$elem.unbind(ev);
       $.fn.easyAudio.bindEvents(opts);
 
       if (opts.onPlay) {
@@ -37,13 +56,14 @@
   }
 
   $.fn.easyAudio.addAudio = function(opts) {
-    opts.$audio = $('<audio src="'+opts.src+'" preload="auto"></audio');
-    opts.audio =  opts.$audio.get(0);
-    $('body').append(opts.$audio);
-
-    opts.$audio.bind('ended', function() {
+    var $audio = $('<audio src="' + opts.src + '" preload="auto"></audio');
+    $audio.bind('ended', function() {
       $(this).remove();
+      if (opts.onEnd) {
+        opts.onEnd();
+      }
     });
+    return $audio[0]
   }
 
   $.fn.easyAudio.configure = function(opts) {
