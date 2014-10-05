@@ -24,27 +24,7 @@
     var ev = opts.event + '.easyaudio';
     opts.$elem.bind(ev, function() {
       var audio = $.fn.easyAudio.addAudio(opts);
-
-      if (opts.conditions) {
-        if (Object.prototype.toString.call(opts.conditions) === "[object Array]") {
-          var play = true;
-          for (var i = 0; i < opts.conditions.length; i++) {
-            if ( ! opts.conditions[i]()) {
-              play = false;
-              break;
-            }
-          }
-          if (play) {
-            audio.play();
-          }
-        } else if (Object.prototype.toString.call(opts.conditions) === "[object Function]") {
-          if (opts.conditions()) {
-            audio.play();
-          }
-        }
-      } else {
-        audio.play();
-      }
+      audio.play();
 
       opts.$elem.unbind(ev);
       $.fn.easyAudio.bindEvents(opts);
