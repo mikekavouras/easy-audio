@@ -1,8 +1,10 @@
 $(document).ready(function() {
   $('#trigger').easyAudio({
-    src: 'audio/kiss',
-    onPlay: function() {
-      console.log('playing');
-    }
+    src: 'audio/tick',
+    event: 'click'
+  });
+  $('#trigger').easyAudio({
+    src: 'audio/knock',
+    event: 'mouseenter'
   });
 });
