@@ -68,7 +68,7 @@
     return false;
   };
 
-  $.fn.easyAudio.preloadAudio(opts) {
+  $.fn.easyAudio.preloadAudio = function(opts) {
     var audio = new Audio();
     audio.preload = "preload";
     audio.src = opts.src;
