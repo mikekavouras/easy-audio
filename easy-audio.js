@@ -60,11 +60,18 @@
     for (var i = 0; i < keys.length; i++) {
       if (!!audio.canPlayType(keys[i])) {
         opts.src = opts.src + '.' + types[keys[i]];
+        $.fn.easyAudio.preloadAudio(opts);
         return true;
       }
     }
 
     return false;
   };
+
+  $.fn.easyAudio.preloadAudio(opts) {
+    var audio = new Audio();
+    audio.preload = "preload";
+    audio.src = opts.src;
+  }
 
 }(jQuery));
