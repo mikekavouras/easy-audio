@@ -12,13 +12,14 @@
         return false;
       }
 
-      // $.fn.easyAudio.addAudio(opts);
       $.fn.easyAudio.bindEvents(opts);
     });
 
   };
 
-  $.fn.easyAudio.defaults = {};
+  $.fn.easyAudio.defaults = {
+    event: 'click'
+  };
 
   $.fn.easyAudio.bindEvents = function(opts) {
     var ev = opts.event + '.easyaudio';
@@ -36,7 +37,7 @@
   }
 
   $.fn.easyAudio.addAudio = function(opts) {
-    var $audio = $('<audio src="' + opts.src + '" preload="auto"></audio');
+    var $audio = $('<audio src="' + $.fn.easyAudio.getSound(opts) + '" preload="auto"></audio');
     $audio.bind('ended', function() {
       $(this).remove();
       if (opts.onEnd) {
@@ -46,20 +47,25 @@
     return $audio[0]
   }
 
+  $.fn.easyAudio.getSound = function(opts) {
+    var sounds = opts.sound;
+    if (Object.prototype.toString.call(sounds) === "[object Array]") {
+      return sounds[Math.floor(Math.random() * sounds.length)] + '.' + opts.extension;
+    } else {
+      return sounds + '.' + opts.extension;
+    }
+  },
+
   $.fn.easyAudio.configure = function(opts) {
     var audio = document.createElement('audio');
     if (!!!audio.canPlayType) return false;
 
-    var types = {
-      'audio/mpeg' : 'mp3',
-      'audio/wav' : 'wav',
-      'audio/ogg' : 'ogg'
-    };
-
+    var types = { 'audio/mpeg' : 'mp3', 'audio/wav' : 'wav', 'audio/ogg' : 'ogg' };
     var keys = Object.keys(types);
+
     for (var i = 0; i < keys.length; i++) {
       if (!!audio.canPlayType(keys[i])) {
-        opts.src = opts.src + '.' + types[keys[i]];
+        opts.extension = types[keys[i]];
         $.fn.easyAudio.preloadAudio(opts);
         return true;
       }
@@ -71,7 +77,7 @@
   $.fn.easyAudio.preloadAudio = function(opts) {
     var audio = new Audio();
     audio.preload = "preload";
-    audio.src = opts.src;
+    audio.src = $.fn.easyAudio.getSound(opts);
   }
 
 }(jQuery));
