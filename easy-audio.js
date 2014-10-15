@@ -8,7 +8,7 @@
       var configured = $.fn.easyAudio.configure(opts);
 
       if ( ! configured) {
-        alert("Your browser doesn't support audio");
+        window.alert("Your browser doesn't support audio");
         return false;
       }
 
@@ -34,7 +34,7 @@
         opts.onPlay();
       }
     });
-  }
+  };
 
   $.fn.easyAudio.addAudio = function(opts) {
     var $audio = $('<audio src="' + $.fn.easyAudio.getSound(opts) + '" preload="auto"></audio');
@@ -44,8 +44,8 @@
         opts.onEnd();
       }
     });
-    return $audio[0]
-  }
+    return $audio[0];
+  };
 
   $.fn.easyAudio.getSound = function(opts) {
     var sounds = opts.sound;
@@ -58,7 +58,9 @@
 
   $.fn.easyAudio.configure = function(opts) {
     var audio = document.createElement('audio');
-    if (!!!audio.canPlayType) return false;
+    if (!!!audio.canPlayType) {
+      return false;
+    }
 
     var types = { 'audio/mpeg' : 'mp3', 'audio/wav' : 'wav', 'audio/ogg' : 'ogg' };
     var keys = Object.keys(types);
