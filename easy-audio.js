@@ -80,6 +80,6 @@
     var audio = new Audio();
     audio.preload = "preload";
     audio.src = $.fn.easyAudio.getSound(opts);
-  }
+  };
 
 }(jQuery));
